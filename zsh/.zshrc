@@ -158,6 +158,11 @@ source $ZSH/oh-my-zsh.sh
 # else
 #   export EDITOR='mvim'
 # fi
+#
+
+#Editors
+export EDITOR="nvim"
+export VISUAL="code"
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -200,6 +205,7 @@ alias g="git"
 alias gs="git status"
 alias ga="git add -A ."
 alias gc="git commit -m"
+alias gcam="git commit -am"
 alias gpsh="git push"
 alias gpll="git pull"
 alias gcout="git checkout"
@@ -218,3 +224,7 @@ case ":$PATH:" in
 esac
 # pnpm end
 export FFMPEG_PATH=/usr/bin/ffmpeg
+
+
+# Added by Antigravity CLI installer
+export PATH="/home/yamo/.local/bin:$PATH"

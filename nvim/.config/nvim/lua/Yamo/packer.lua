@@ -24,7 +24,8 @@ return require('packer').startup(function(use)
     requires = { {'nvim-lua/plenary.nvim'} }
   }
 
-  use( 'nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'})
+  -- use( 'nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'})
+  use({ 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' })
   use( 'nvim-treesitter/playground')
   use( 'mbbill/undotree')
   use( 'tpope/vim-fugitive')
@@ -34,6 +35,36 @@ return require('packer').startup(function(use)
   use( 'nvim-tree/nvim-web-devicons')
   use ('ray-x/go.nvim')
   use ('ray-x/guihua.lua')
+  use ("michaelrommel/nvim-silicon")
+  use ("christoomey/vim-tmux-navigator")
+
+  -- Essential for writing React components. Auto-closes and auto-renames HTML/JSX tags.
+  use('windwp/nvim-ts-autotag')
+
+  -- Automatically pairs parentheses, brackets, and quotes. Integrates well with nvim-cmp.
+  use({
+    "windwp/nvim-autopairs",
+    config = function() require("nvim-autopairs").setup {} end
+  })
+
+  -- Smart commenting that understands context (e.g., knowing when to use {/* */} inside JSX vs // outside).
+  use({
+      'numToStr/Comment.nvim',
+      config = function() require('Comment').setup() end
+  })
+
+  -- Lightweight, lightning-fast formatter plugin. 
+  -- You can easily configure this to run Prettier for TS/JS and gofmt/goimports for Go on save.
+  use('stevearc/conform.nvim')
+
+  -- The standard for Neovim status lines. Highly customizable to match your specific terminal colors.
+  use({
+    'nvim-lualine/lualine.nvim',
+    requires = { 'nvim-tree/nvim-web-devicons', opt = true }
+  })
+
+  -- Since you use Fugitive for heavy Git operations, Gitsigns gives you the fast, inline gutter highlights for added/removed/modified lines.
+  use('lewis6991/gitsigns.nvim')
 
 --  use({
 	--"L3MON4D3/LuaSnip",
