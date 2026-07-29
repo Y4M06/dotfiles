@@ -2,10 +2,6 @@ export ZSH="$HOME/.oh-my-zsh"
 export VAGRANT_HOME=/run/media/yamo/dev/.Vagrant.d/
 export MANPAGER='nvim +Man!'
 
-clear-terminal() { tput reset; zle redisplay; }
-zle -N clear-terminal
-bindkey "^g" clear-terminal
-
 fuzzy-history() {
   local selected_command=$(history -n 1 | fzf --height 40% --reverse --query="$LBUFFER")
 
@@ -61,6 +57,9 @@ export NPM_GLOBAL="$HOME/.npm-global"
 export PATH="$NPM_GLOBAL/bin:$PATH"
 export PATH=$PATH:$(go env GOPATH)/bin
 
+export VITE_PORT=9266
+export PORT=9266
+
 # Aliases
 alias dev='cd /run/media/yamo/dev'
 alias storage='cd /run/media/yamo/storage/'
@@ -72,6 +71,10 @@ alias flatpak-u="$HOME/scripts/flatpak.sh"
 alias cleanup="$HOME/scripts/cleanup.sh"
 alias bluetoothRestart="$HOME/scripts/bluetoothRestart.sh"
 alias dotsync="git -C /run/media/yamo/dev/dotfiles add . && git -C /run/media/yamo/dev/dotfiles commit -m 'sync' && git -C /run/media/yamo/dev/dotfiles push"
+alias cd2="cd ../.."
+alias cd3="cd ../../.."
+alias cd4="cd ../../../.."
+alias cd5="cd ../../../../.."
 
 # Git Shell Aliases
 alias g="git"
@@ -87,6 +90,10 @@ alias gbr="git branch"
 alias h2='$(npm prefix -s)/node_modules/.bin/shopify hydrogen'
 alias pn=pnpm
 
+mkcdir(){
+  mkdir -p -- "$1" &&  cd -P -- "$1"
+}
+
 export PNPM_HOME="/home/yamo/.local/share/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
@@ -97,3 +104,17 @@ export FFMPEG_PATH=/usr/bin/ffmpeg
 # Added by Antigravity CLI installer
 export PATH="/home/yamo/.local/bin:$PATH"
 
+# Must come after oh-my-zsh.sh sourcing — its emacs-mode setup resets the
+# keymap and silently wipes any bindkey calls made earlier in this file.
+clear-terminal() { tput reset; zle redisplay; }
+zle -N clear-terminal
+bindkey "^g" clear-terminal
+
+
+# pnpm
+export PNPM_HOME="/home/yamo/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME/bin:"*) ;;
+  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
+esac
+# pnpm end
