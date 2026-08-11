@@ -99,6 +99,19 @@ alias gbr="git branch"
 alias h2='$(npm prefix -s)/node_modules/.bin/shopify hydrogen'
 alias pn=pnpm
 
+# eza replaces ls
+alias ls='eza --icons'
+alias ll='eza -la --icons --git'
+alias lt='eza --tree --icons --level=2'
+
+# zoxide replaces cd
+eval "$(zoxide init zsh)"
+alias cd='z'
+
+# ripgrep / fd
+alias grep='rg'
+alias find='fd'
+
 # funcs
 mkcdir(){
   mkdir -p -- "$1" &&  cd -P -- "$1"
