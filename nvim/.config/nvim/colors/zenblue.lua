@@ -9,4 +9,4 @@ end
 vim.g.colors_name = "zenblue"
 vim.o.background = "dark"
 
-require("Yamo.zenblue").setup()
+require("zenblue").setup()

@@ -1,4 +1,4 @@
-require('Yamo.packer')
+require('Yamo.lazy')
 require('Yamo.set')
 require('Yamo.remap')
 require('Yamo.zenblue')

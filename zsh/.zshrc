@@ -2,6 +2,13 @@ export ZSH="$HOME/.oh-my-zsh"
 export VAGRANT_HOME=/run/media/yamo/dev/.Vagrant.d/
 export MANPAGER='nvim +Man!'
 
+# Ctrl-T to fuzzy find files and paste into command line
+export FZF_CTRL_T_OPTS="--preview 'bat --color=always --line-range :50 {}'"
+# Ctrl-R for better history search
+export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap"
+# Alt-C to cd into subdirectories
+export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -50'"
+
 fuzzy-history() {
   local selected_command=$(history -n 1 | fzf --height 40% --reverse --query="$LBUFFER")
 
@@ -39,9 +46,10 @@ zstyle ':omz:update' mode auto
 export EDITOR="nvim"
 export VISUAL="code"
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+eval "$(fnm env --use-on-cd --shell zsh)"
 
 export CLICOLOR=1
 export LSCOLORS=gxFxCxDxBxegedabagaced
@@ -75,6 +83,7 @@ alias cd2="cd ../.."
 alias cd3="cd ../../.."
 alias cd4="cd ../../../.."
 alias cd5="cd ../../../../.."
+alias yt-dlp="yt-dlp -f - "
 
 # Git Shell Aliases
 alias g="git"
@@ -90,8 +99,29 @@ alias gbr="git branch"
 alias h2='$(npm prefix -s)/node_modules/.bin/shopify hydrogen'
 alias pn=pnpm
 
+# funcs
 mkcdir(){
   mkdir -p -- "$1" &&  cd -P -- "$1"
+}
+
+cpg++() {
+    if [[ -z "$1" ]]; then
+        echo "Usage: cpg++ <filename-without-extension>"
+        return 1
+    fi
+    local file="$1"
+    g++ -DLOCAL -std=c++17 -Wall -Wshadow -Wconversion -Wformat=2 \
+        -fsanitize=address,undefined \
+        -o "${file}" "${file}.cpp" && ./"${file}"
+}
+
+cpnew() {
+    if [[ -z "$1" ]]; then
+        echo "Usage: cpnew <filename-without-extension>"
+        return 1
+    fi
+    cp ~/run/media/yamo/dev/cp/ecpc2026/template.cpp "${1}.cpp"
+    nvim "${1}.cpp"   # or your editor of choice
 }
 
 export PNPM_HOME="/home/yamo/.local/share/pnpm"

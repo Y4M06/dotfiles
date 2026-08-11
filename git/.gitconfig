@@ -41,3 +41,5 @@
   pop = stash pop
   apply = stash apply
   rl = reflog
+[url "git@github.com:"]
+	insteadOf = https://github.com/
