@@ -6,6 +6,7 @@ vim.opt.guicursor =  "a:block-blinkwait175-blinkoff150-blinkon175"
 vim.opt.colorcolumn = "81"
 vim.opt.relativenumber = true
 vim.opt.wrap = true
+vim.opt.completeopt = { "menu", "menuone", "noselect" }
 
 -- Indentation
 vim.opt.smartindent = true

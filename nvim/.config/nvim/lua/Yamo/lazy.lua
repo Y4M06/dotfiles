@@ -53,8 +53,9 @@ require("lazy").setup({
   -- ─── Treesitter ───────────────────────────────────────────────────────
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "master",
+    lazy = false,
     build = ":TSUpdate",
-    event = { "BufReadPost", "BufNewFile" },
     config = function()
       require("nvim-treesitter.configs").setup({
         -- A list of parser names, or "all" (the five listed parsers should always be installed)
@@ -101,7 +102,7 @@ require("lazy").setup({
       "L3MON4D3/LuaSnip",
       "rafamadriz/friendly-snippets",
     },
-    event = { "BufReadPre", "BufNewFile" },
+    lazy = false,
   },
 
   -- ─── Formatting ──────────────────────────────────────────────────────
