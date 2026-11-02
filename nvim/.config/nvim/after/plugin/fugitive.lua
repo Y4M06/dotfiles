@@ -1,2 +1,1 @@
-vim.keymap.set("n", "<leader>gs", vim.cmd.Git);
-
+-- Fugitive keymaps are managed by lazy.nvim keys spec in lua/Yamo/lazy.lua

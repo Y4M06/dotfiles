@@ -1,17 +1,31 @@
 -- lsp.lua
 local lsp_zero = require('lsp-zero')
 
--- Enable default keymaps & pass cmp capabilities to lspconfig
+-- Get capabilities from blink.cmp if available
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+local has_blink, blink = pcall(require, 'blink.cmp')
+if has_blink then
+  capabilities = blink.get_lsp_capabilities(capabilities)
+end
+
+-- Enable default keymaps & pass blink capabilities to lspconfig
 lsp_zero.extend_lspconfig({
   sign_text = true,
-  lsp_attach = lsp_zero.default_keymaps,
-  capabilities = require('cmp_nvim_lsp').default_capabilities(),
+  lsp_attach = function(client, bufnr)
+    lsp_zero.default_keymaps({ buffer = bufnr })
+
+    -- Toggle Inlay Hints (Neovim 0.10+)
+    vim.keymap.set("n", "<leader>th", function()
+      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
+    end, { buffer = bufnr, desc = "Toggle Inlay Hints" })
+  end,
+  capabilities = capabilities,
 })
 
 -- Setup Mason & Mason-LSPConfig
 require('mason').setup({})
 require('mason-lspconfig').setup({
-  ensure_installed = { 'lua_ls', 'ts_ls', 'gopls', 'html' },
+  ensure_installed = { 'lua_ls', 'ts_ls', 'gopls', 'html', 'clangd', 'texlab', 'pyright', 'dockerls', 'yamlls' },
   handlers = {
     -- Default handler for installed servers
     function(server_name)
@@ -46,61 +60,10 @@ require('mason-lspconfig').setup({
   },
 })
 
--- Load VSCode snippet definitions (e.g. friendly-snippets for HTML, Go, etc.)
-require('luasnip.loaders.from_vscode').lazy_load()
-
--- Setup nvim-cmp for autocomplete
-local cmp = require('cmp')
-
-cmp.setup({
-  completion = {
-    completeopt = 'menu,menuone,noinsert',
-  },
-  sources = {
-    { name = 'nvim_lsp' },
-    { name = 'luasnip' },
-    { name = 'buffer' },
-    { name = 'path' },
-    { name = 'nvim_lua' },
-  },
-  mapping = cmp.mapping.preset.insert({
-    -- Confirm selection with Enter or Ctrl-y
-    ['<CR>'] = cmp.mapping.confirm({ select = true }),
-    ['<C-y>'] = cmp.mapping.confirm({ select = true }),
-
-    -- Trigger completion menu manually
-    ['<C-Space>'] = cmp.mapping.complete(),
-
-    -- Navigate completion items with Tab / Shift-Tab
-    ['<Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-    ['<S-Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-
-    -- Scroll documentation
-    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-d>'] = cmp.mapping.scroll_docs(4),
-  }),
-  snippet = {
-    expand = function(args)
-      require('luasnip').lsp_expand(args.body)
-    end,
-  },
-})
-
--- Configure diagnostics: enable virtual_text for inline error messages and custom sign icons
+-- Configure diagnostics:
+-- virtual_text is disabled here because tiny-inline-diagnostic handles rich inline display
 vim.diagnostic.config({
-  virtual_text = true,
+  virtual_text = false,
   signs = {
     text = {
       [vim.diagnostic.severity.ERROR] = '✘',
@@ -119,5 +82,25 @@ vim.diagnostic.config({
     source = 'always',
     header = '',
     prefix = '',
+    max_width = 80,
   },
+})
+
+-- Diagnostic navigation & manual inspection keymaps
+vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Previous Diagnostic" })
+vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next Diagnostic" })
+vim.keymap.set("n", "gl", vim.diagnostic.open_float, { desc = "Open Diagnostic Float" })
+
+-- Auto-insert package header for new Go files to prevent gopls blank file errors
+vim.api.nvim_create_autocmd("BufNewFile", {
+  group = vim.api.nvim_create_augroup("GoBufNewFile", { clear = true }),
+  pattern = "*.go",
+  callback = function()
+    local dir_name = vim.fn.expand("%:p:h:t")
+    local pkg_name = dir_name
+    if pkg_name == "" or pkg_name == "." or pkg_name == "/" then
+      pkg_name = "main"
+    end
+    vim.api.nvim_buf_set_lines(0, 0, -1, false, { "package " .. pkg_name, "" })
+  end,
 })

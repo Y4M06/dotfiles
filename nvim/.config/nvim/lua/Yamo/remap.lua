@@ -1,22 +1,24 @@
 vim.g.mapleader = " "
 
 -- Navigation
-vim.keymap.set("n", "<leader>e", vim.cmd.Ex)
+vim.keymap.set("n", "<leader>e", "<cmd>Oil<CR>", { desc = "Open file explorer (Oil)" })
 
-vim.keymap.set("n", "<leader>ff", ":find *")
-vim.keymap.set("n", "<leader>fb", ":buffers<CR>:b")
+vim.keymap.set("n", "<leader>ff", ":find ", { desc = "Find file (built-in)" })
+vim.keymap.set("n", "<leader>fb", ":buffers<CR>:b ", { desc = "Switch buffer (built-in)" })
 
-vim.keymap.set("v", "<M-j>", ":m '>+1<CR>gv=gv")
-vim.keymap.set("v", "<M-k>", ":m '<-2<CR>gv=gv")
+-- Line movement in visual mode
+vim.keymap.set("v", "<M-j>", ":m '>+1<CR>gv=gv", { desc = "Move line down" })
+vim.keymap.set("v", "<M-k>", ":m '<-2<CR>gv=gv", { desc = "Move line up" })
 
--- cursor stay in the middle
-vim.keymap.set("n", "<C-d>", "<C-d>zz")
-vim.keymap.set("n", "<C-u>", "<C-u>zz")
-vim.keymap.set("n", "n", "nzzzv")
-vim.keymap.set("n", "N", "Nzzzv")
+-- Keep cursor centered during scrolling / search
+vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Half-page down (centered)" })
+vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Half-page up (centered)" })
+vim.keymap.set("n", "n", "nzzzv", { desc = "Next search match (centered)" })
+vim.keymap.set("n", "N", "Nzzzv", { desc = "Prev search match (centered)" })
 
--- yank to the system clipboard
-vim.keymap.set({"n", "v"}, "<leader>y", "\"+y")
-vim.keymap.set("n", "<leader>Y", "\"+Y")
+-- System clipboard yanking
+vim.keymap.set({"n", "v"}, "<leader>y", '"+y', { desc = "Yank selection to clipboard" })
+vim.keymap.set("n", "<leader>Y", '"+Y', { desc = "Yank line to clipboard" })
 
-vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", {silent = true})
+-- File permissions
+vim.keymap.set("n", "<leader>xc", "<cmd>!chmod +x %<CR>", { desc = "Make file executable", silent = true })

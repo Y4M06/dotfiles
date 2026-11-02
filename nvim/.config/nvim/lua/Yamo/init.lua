@@ -1,7 +1,9 @@
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+
+require('Yamo.remap')
 require('Yamo.lazy')
 require('Yamo.set')
-require('Yamo.remap')
-require('Yamo.zenblue')
 
 vim.cmd.colorscheme("zenblue")
 vim.g.netrw_browse_split = 0

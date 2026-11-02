@@ -1,11 +1,16 @@
-
 vim.opt.nu = true
 
 -- UI
-vim.opt.guicursor =  "a:block-blinkwait175-blinkoff150-blinkon175"
+vim.opt.guicursor = "a:block-blinkwait175-blinkoff150-blinkon175"
 vim.opt.colorcolumn = "81"
+vim.opt.textwidth = 80
 vim.opt.relativenumber = true
+vim.opt.cursorline = true
+vim.opt.cursorlineopt = "number"
 vim.opt.wrap = true
+vim.opt.linebreak = true
+vim.opt.breakindent = true
+vim.opt.showbreak = "↳ "
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
 
 -- Indentation
@@ -15,8 +20,8 @@ vim.opt.tabstop = 2
 vim.opt.expandtab = true
 vim.opt.shiftwidth = 2
 vim.opt.listchars = {
-  tab = "| ",
-  trail = "-",
+	tab = "| ",
+	trail = "-",
 }
 
 -- Search
@@ -28,27 +33,6 @@ vim.opt.termguicolors = true
 
 vim.opt.scrolloff = 8
 
-vim.opt.updatetime = 50
+vim.opt.updatetime = 300
 
 vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

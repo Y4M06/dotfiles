@@ -1,1 +1,1 @@
-vim.keymap.set('n', "<leader>u", vim.cmd.UndotreeToggle)
+-- Undotree keymaps are managed by lazy.nvim keys spec in lua/Yamo/lazy.lua

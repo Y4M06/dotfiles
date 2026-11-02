@@ -67,6 +67,7 @@ export PATH=$PATH:$(go env GOPATH)/bin
 
 export VITE_PORT=9266
 export PORT=9266
+export TEST_PORT=7357
 
 # Aliases
 alias dev='cd /run/media/yamo/dev'
@@ -100,13 +101,10 @@ alias h2='$(npm prefix -s)/node_modules/.bin/shopify hydrogen'
 alias pn=pnpm
 
 # eza replaces ls
-alias ls='eza --icons'
-alias ll='eza -la --icons --git'
-alias lt='eza --tree --icons --level=2'
+# alias ls='eza --icons'
+# alias ll='eza -la --icons --git'
+# alias lt='eza --tree --icons --level=2'
 
-# zoxide replaces cd
-eval "$(zoxide init zsh)"
-alias cd='z'
 
 # ripgrep / fd
 alias grep='rg'
@@ -114,7 +112,7 @@ alias find='fd'
 
 # funcs
 mkcdir(){
-  mkdir -p -- "$1" &&  cd -P -- "$1"
+  mkdir -p -- "$1" && builtin  cd -P -- "$1"
 }
 
 cpg++() {
@@ -136,6 +134,23 @@ cpnew() {
     cp ~/run/media/yamo/dev/cp/ecpc2026/template.cpp "${1}.cpp"
     nvim "${1}.cpp"   # or your editor of choice
 }
+
+mkleet(){
+  if [[ -z "$1" ]]; then
+    echo "Usage mkgoleet <problem-number>"
+    return 1
+  fi
+
+  mkcdir "$1" \
+    && go mod init github.com/Y4M06/leetcode/"$1" \
+    && echo "package main" > main.go \
+    && touch "$1.py" "$1.ts"
+}
+
+eval "$(zoxide init zsh)"
+alias za='zoxide add'
+alias zq='zoxide query'
+alias zr='zoxide remove'
 
 export PNPM_HOME="/home/yamo/.local/share/pnpm"
 case ":$PATH:" in
@@ -161,3 +176,11 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME/bin:$PATH" ;;
 esac
 # pnpm end
+#
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/yamo/google-cloud-sdk/path.zsh.inc' ]; then . '/home/yamo/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/yamo/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/yamo/google-cloud-sdk/completion.zsh.inc'; fi
+eval "$(/home/yamo/.local/bin/mise activate zsh)"
