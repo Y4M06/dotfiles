@@ -137,7 +137,7 @@ cpnew() {
 
 mkleet(){
   if [[ -z "$1" ]]; then
-    echo "Usage mkgoleet <problem-number>"
+    echo "Usage mkleet <problem-number>"
     return 1
   fi
 
